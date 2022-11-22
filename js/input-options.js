@@ -1,20 +1,14 @@
 // Input elements functions
 function getCheckboxOptions(pageElement, text_list) {
   let checkboxElements = pageElement
-  let output_string = ""
+  // let output_string = ""
 
   if (checkboxElements.length == 0) return
 
   checkboxElements.forEach(element => {
     console.log(element)
-    output_string += "Checkbox Input" + NEWLINE
-    output_string += "options: 2" + NEWLINE + NEWLINE
     getNearestText(element, text_list)
-
-
-
   })
-  console.log(output_string)
 
   return
 }
