@@ -27,8 +27,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
   console.log("message recieved");
 
   // Creates a click notification
-  // if (request.type === "notification") {
-  //   chrome.notifications.create('', request.options);
-  //   console.log("chrome notif created")
-  // }
+  if (request.type === "notification") {
+    chrome.notifications.create('', request.options);
+    console.log("chrome notif created")
+  }
 })

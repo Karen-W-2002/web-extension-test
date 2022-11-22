@@ -20,7 +20,10 @@
         "<all_urls>"
       ],
       "js": [
-        "content-scripts.js"
+        "js/content-scripts.js",
+        "js/input-options.js",
+        "js/text-search.js",
+        "js/constants.js"
       ]
     }
   ],
