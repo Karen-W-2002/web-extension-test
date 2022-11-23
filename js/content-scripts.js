@@ -71,7 +71,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   }
   else if (req.cmd === "createContextMenu") {
     // TODO: 1. Clear results.html
-    addToResults()
     // TODO: 2. Put in correct information
 
     // Create new tab: results.html
