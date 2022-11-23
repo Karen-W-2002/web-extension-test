@@ -1,3 +1,6 @@
+// input-options.js
+
+// TODO: days in dates are a bit funky because edge case for min max same month and year... doesn't subtract the days
 // Input elements functions
 function getCheckboxOptions(pageElement, text_list) {
   let checkboxElements = pageElement

@@ -1,9 +1,14 @@
 // content-scripts.js
 
-// TODO: days in dates are a bit funky because edge case for min max same month and year... doesn't subtract the days
+// let us know the script is running
+console.log("Web Extension Test up and running!")
+
+chrome.runtime.sendMessage({
+  cmd: "addContextMenus"
+})
 
 // Listens to incoming messages
-chrome.runtime.onMessage.addListener(function (req, sender, response) {
+chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   if (req.type === "popup") {
 
@@ -20,11 +25,10 @@ chrome.runtime.onMessage.addListener(function (req, sender, response) {
 
     {
       // TESTING AREA
-      labels = document.querySelectorAll('div[style*="display:none"]')
-      labels.forEach(el => {
-        el.style.display = "initial"
-      })
-
+      // labels = document.querySelectorAll('div[style*="display:none"]')
+      // labels.forEach(el => {
+      //   el.style.display = "initial"
+      // })
     }
 
     // List that has all TEXT positions
@@ -68,7 +72,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, response) {
   else {
 
     // console.log("This message only shows on the webpage console, message: " + req.message);
-    response("hello from content scripts");
+    res("hello from content scripts");
   }
 
   // asynchronous response
@@ -80,7 +84,7 @@ document.addEventListener('click', (event) => {
 
   // Sends a message to background to create a notification
   chrome.runtime.sendMessage('', {
-    type: "notification",
+    cmd: "notification",
     options: {
       type: "basic",
       title: "click notification",

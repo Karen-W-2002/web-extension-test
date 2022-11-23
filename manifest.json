@@ -1,12 +1,13 @@
 {
   "name": "Web Extension Test",
   "description": "Build a web extension test",
-  "version": "1.0",
+  "version": "0.2",
   "manifest_version": 3,
   "permissions": [
     "storage",
     "tabs",
-    "notifications"
+    "notifications",
+    "contextMenus"
   ],
   "host_permissions": [
     "<all_urls>"

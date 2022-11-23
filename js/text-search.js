@@ -37,23 +37,43 @@ function getNearestText(element, text_list) {
     let right_space = el.pos.left - element_pos.right
     let left_space = element_pos.left - el.pos.right
 
-    // If empty, sets the new text_elements.top
-    // otherwise checks if the new offset_top is smaller
+    // If empty, sets the new text_elements
+    // otherwise checks if the new offsets is smaller
     // AND it then checks if the right and left spaces between the input and text is smaller than 50px
 
+
+    // FIXME: "IF" OR "ELSE IF"?
     // Check RIGHT
-    if ((text_elements.top == null || (offsets.top + offsets.bottom > offset_top + offset_bottom))
-      && ((right_space < 50 && right_space > 0))) {
+    if ((text_elements.right == null || (offsets.top + offsets.bottom > offset_top + offset_bottom))
+      && (right_space < 50 && right_space > 0)) {
       offsets.top = offset_top
       offsets.bottom = offset_bottom
+      text_elements.right = el.element
+    }
+    // Check BOTTOM
+    else if ((text_elements.bottom == null || (offsets.right + offsets.left > offset_right + offset_left))
+      && (bottom_space < 50 && bottom_space > 0)) {
+      offsets.right = offset_right
+      offsets.left = offset_left
+      text_elements.bottom = el.element
+    }
+    // Check LEFT
+    else if ((text_elements.left == null || (offsets.top + offsets.bottom > offset_top + offset_bottom))
+      && (left_space < 50 && left_space > 0)) {
+      offsets.top = offset_top
+      offsets.bottom = offset_bottom
+      text_elements.left = el.element
+    }
+    // Check TOP
+    else if ((text_elements.bottom == null || (offsets.right + offsets.left > offset_right + offset_left))
+      && (top_space < 50 && top_space > 50)) {
+      offsets.right = offset_right
+      offsets.left = offset_left
       text_elements.top = el.element
     }
-    // TODO: USE ELSE IF OR IF?
+
   })
   // Do something with offset
   // TODO: use all the offsets in the future, currently it is a simplified version (only right)
-  console.log(text_elements.top.childNodes[0].nodeValue)
-  // console.log(text_elements.top.firstChild.textContent)
-  // console.log(text_elements.top.textContext)
-  // console.log(offsets)
+  console.log(text_elements.right.childNodes[0].nodeValue)
 }
