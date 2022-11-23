@@ -30,28 +30,28 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     console.log("chrome notif created")
   }
   else if (req.cmd === "addContextMenus") {
-    handleContextMenus()
-  }
-})
+    // Removes possibility of duplicate
+    chrome.contextMenus.removeAll()
 
-function handleContextMenus() {
+    // Creates a menu
+    chrome.contextMenus.create({
+      title: "Web Test",
+      contexts: ["all"],
+      id: "WebTest"
+    })
 
-  // Removes possibility of duplicate
-  chrome.contextMenus.removeAll()
-
-  // Creates a menu
-  chrome.contextMenus.create({
-    title: "Web Test",
-    contexts: ["all"],
-    id: "WebTest"
-  })
-
-  // Handle interaction w/ menu
-  chrome.contextMenus.onClicked.addListener(menu => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.create({
-        url: 'results/results.html'
+    chrome.contextMenus.onClicked.addListener(menu => {
+      // FIXME: creates multile results pages.... even when the tab is not active????
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+          cmd: "createContextMenu"
+        })
       })
     })
-  })
-}
+  }
+  else if (req.cmd === "createResultsPage") {
+    chrome.tabs.create({
+      url: 'results/results.html'
+    })
+  }
+})

@@ -24,7 +24,8 @@
         "js/content-scripts.js",
         "js/input-options.js",
         "js/text-search.js",
-        "js/constants.js"
+        "js/constants.js",
+        "results/results.js"
       ]
     }
   ],
