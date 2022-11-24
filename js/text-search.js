@@ -75,5 +75,7 @@ function getNearestText(element, text_list) {
   })
   // Do something with offset
   // TODO: use all the offsets in the future, currently it is a simplified version (only right)
-  console.log(text_elements.right.childNodes[0].nodeValue)
+  if (text_elements.right.childNodes[0].nodeValue != "")
+    return `<p>Checkbox input name - ${text_elements.right.childNodes[0].nodeValue}</p><br/>`
+  return
 }

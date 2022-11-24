@@ -49,17 +49,11 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
       })
     })
   }
+  // Creates results.html
   else if (req.cmd === "createResultsPage") {
-    chrome.tabs.create({
-      url: 'results/results.html'
-    }, ({ id: createdTabId }) => {
-      console.log(createdTabId)
-      chrome.scripting.executeScript({
-        target: {
-          tabId: createdTabId,
-        },
-        files: ['results/results.js'],
-      })
-    })
+    chrome.storage.local.set({ foo: req.results }, function () {
+      // Storage is updated, create the tab
+      chrome.tabs.create({ url: "results/results.html" });
+    });
   }
 })

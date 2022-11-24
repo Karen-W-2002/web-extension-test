@@ -35,7 +35,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     let text_list = []
     text_list = getTextList()
 
-
     this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
     // this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
     // this.getRangeOptions(document.querySelectorAll("input[type=range]"))
@@ -70,12 +69,14 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   }
   else if (req.cmd === "createContextMenu") {
-    // TODO: 1. Clear results.html
-    // TODO: 2. Put in correct information
-
+    // TODO: 1. Put in correct information
+    let text_list = []
+    text_list = getTextList()
+    let report_string = this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
     // Create new tab: results.html
     chrome.runtime.sendMessage({
-      cmd: "createResultsPage"
+      cmd: "createResultsPage",
+      results: report_string
     })
   }
   else {

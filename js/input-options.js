@@ -4,16 +4,16 @@
 // Input elements functions
 function getCheckboxOptions(pageElement, text_list) {
   let checkboxElements = pageElement
-  // let output_string = ""
+  let output_string = ""
 
   if (checkboxElements.length == 0) return
 
   checkboxElements.forEach(element => {
     console.log(element)
-    getNearestText(element, text_list)
+    output_string += getNearestText(element, text_list)
   })
 
-  return
+  return output_string
 }
 
 function getColorOptions(pageElement) {
