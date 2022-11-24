@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     })
 
     chrome.contextMenus.onClicked.addListener(menu => {
-      // FIXME: creates multiple results pages.... even when the tab is not active????
+      // FIXME: creates multiple reports pages.... even when the tab is not active????
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {
           cmd: "createContextMenu"
@@ -49,11 +49,11 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
       })
     })
   }
-  // Creates results.html
-  else if (req.cmd === "createResultsPage") {
+  // Creates reports.html
+  else if (req.cmd === "createReportsPage") {
     chrome.storage.local.set({ foo: req.results }, function () {
       // Storage is updated, create the tab
-      chrome.tabs.create({ url: "results/results.html" });
+      chrome.tabs.create({ url: "reports/reports.html" });
     });
   }
 })

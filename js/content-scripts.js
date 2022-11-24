@@ -73,9 +73,9 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     let text_list = []
     text_list = getTextList()
     let report_string = this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
-    // Create new tab: results.html
+    // Create new tab: reports.html
     chrome.runtime.sendMessage({
-      cmd: "createResultsPage",
+      cmd: "createReportsPage",
       results: report_string
     })
   }
