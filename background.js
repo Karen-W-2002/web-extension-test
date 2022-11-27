@@ -25,11 +25,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Listens to incoming messages
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
   // Creates a click notification
-  if (req.cmd === "notification") {
-    chrome.notifications.create('', req.options);
-    console.log("chrome notif created")
-  }
-  else if (req.cmd === "addContextMenus") {
+  // if (req.cmd === "notification") {
+  //   chrome.notifications.create('', req.options);
+  //   console.log("chrome notif created")
+  // }
+  if (req.cmd === "addContextMenus") {
     // Removes possibility of duplicate
     chrome.contextMenus.removeAll()
 

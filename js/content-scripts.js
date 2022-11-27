@@ -90,16 +90,16 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 });
 
 // Mouse click event listener
-document.addEventListener('click', (event) => {
+// document.addEventListener('click', (event) => {
 
-  // Sends a message to background to create a notification
-  chrome.runtime.sendMessage('', {
-    cmd: "notification",
-    options: {
-      type: "basic",
-      title: "click notification",
-      message: "PosX: " + event.clientX + " PosY: " + event.clientY + "\n" + event.target,
-      iconUrl: "assets/apple.png",
-    }
-  })
-})
+//   // Sends a message to background to create a notification
+//   chrome.runtime.sendMessage('', {
+//     cmd: "notification",
+//     options: {
+//       type: "basic",
+//       title: "click notification",
+//       message: "PosX: " + event.clientX + " PosY: " + event.clientY + "\n" + event.target,
+//       iconUrl: "assets/apple.png",
+//     }
+//   })
+// })
