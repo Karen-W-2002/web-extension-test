@@ -1,9 +1,11 @@
 // background.js
 
+// On installed listener
 chrome.runtime.onInstalled.addListener(() => {
   console.log("background.js running");
 });
 
+// On updated listener
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
   // Is there a cleaner way of doing this?
@@ -22,27 +24,19 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 })
 
-// Listens to incoming messages
+// Listens to incoming messages from content scripts
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   if (req.cmd === "addContextMenus") {
-    // Removes possibility of duplicate
+
+    // Removes posibility of duplicate context menus before creating a new one
     chrome.contextMenus.removeAll()
 
     // Creates a menu
     chrome.contextMenus.create({
       title: "Web Test",
       contexts: ["all"],
-      id: "WebTest"
-    })
-
-    chrome.contextMenus.onClicked.addListener(menu => {
-      // FIXME: creates multiple reports pages.... even when the tab is not active????
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          cmd: "createContextMenu"
-        })
-      })
+      id: "WebTest",
     })
   }
   // Creates reports.html
@@ -52,4 +46,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
       chrome.tabs.create({ url: "reports/reports.html" })
     })
   }
+})
+
+// Creates a listener for context menu clicks, then sends a message to content scripts to create a context menu
+chrome.contextMenus.onClicked.addListener(function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, {
+      cmd: "createContextMenu"
+    })
+  })
 })
