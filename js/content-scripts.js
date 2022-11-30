@@ -3,10 +3,6 @@
 // let us know the script is running
 console.log("Web Extension Test up and running!")
 
-chrome.runtime.sendMessage({
-  cmd: "addContextMenus"
-})
-
 // Listens to incoming messages
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
 

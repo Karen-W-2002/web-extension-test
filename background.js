@@ -1,12 +1,21 @@
 // background.js
 
 // On installed listener
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("background.js running");
-});
+chrome.runtime.onInstalled.addListener(function () {
+  console.log("background.js running")
+  // Removes posibility of duplicate context menus before creating a new one
+  chrome.contextMenus.removeAll()
+
+  // Creates a menu
+  chrome.contextMenus.create({
+    title: "Web Test",
+    contexts: ["all"],
+    id: "WebTest",
+  })
+})
 
 // On updated listener
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
   // Is there a cleaner way of doing this?
   if (tab.url && changeInfo.status === "complete") {
@@ -27,20 +36,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 // Listens to incoming messages from content scripts
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
-  if (req.cmd === "addContextMenus") {
-
-    // Removes posibility of duplicate context menus before creating a new one
-    chrome.contextMenus.removeAll()
-
-    // Creates a menu
-    chrome.contextMenus.create({
-      title: "Web Test",
-      contexts: ["all"],
-      id: "WebTest",
-    })
-  }
   // Creates reports.html
-  else if (req.cmd === "createReportsPage") {
+  if (req.cmd === "createReportsPage") {
     chrome.storage.local.set({ foo: req.results }, function () {
       // Storage is updated, create the tab
       chrome.tabs.create({ url: "reports/reports.html" })
