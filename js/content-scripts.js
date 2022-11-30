@@ -25,10 +25,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     {
       // TESTING AREA
-      // labels = document.querySelectorAll('div[style*="display:none"]')
-      // labels.forEach(el => {
-      //   el.style.display = "initial"
-      // })
+
     }
 
     // List that has all TEXT positions
@@ -73,6 +70,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     let text_list = []
     text_list = getTextList()
     let report_string = this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
+
     // Create new tab: reports.html
     chrome.runtime.sendMessage({
       cmd: "createReportsPage",
@@ -82,24 +80,9 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   else {
 
     // console.log("This message only shows on the webpage console, message: " + req.message);
-    res("hello from content scripts");
+    res("hello from content scripts")
   }
 
   // asynchronous response
-  return true;
-});
-
-// Mouse click event listener
-// document.addEventListener('click', (event) => {
-
-//   // Sends a message to background to create a notification
-//   chrome.runtime.sendMessage('', {
-//     cmd: "notification",
-//     options: {
-//       type: "basic",
-//       title: "click notification",
-//       message: "PosX: " + event.clientX + " PosY: " + event.clientY + "\n" + event.target,
-//       iconUrl: "assets/apple.png",
-//     }
-//   })
-// })
+  return true
+})

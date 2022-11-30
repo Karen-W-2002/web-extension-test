@@ -24,11 +24,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 // Listens to incoming messages
 chrome.runtime.onMessage.addListener(function (req, sender, res) {
-  // Creates a click notification
-  // if (req.cmd === "notification") {
-  //   chrome.notifications.create('', req.options);
-  //   console.log("chrome notif created")
-  // }
+
   if (req.cmd === "addContextMenus") {
     // Removes possibility of duplicate
     chrome.contextMenus.removeAll()
@@ -53,7 +49,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   else if (req.cmd === "createReportsPage") {
     chrome.storage.local.set({ foo: req.results }, function () {
       // Storage is updated, create the tab
-      chrome.tabs.create({ url: "reports/reports.html" });
-    });
+      chrome.tabs.create({ url: "reports/reports.html" })
+    })
   }
 })

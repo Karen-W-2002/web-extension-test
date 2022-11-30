@@ -9,8 +9,10 @@ function getCheckboxOptions(pageElement, text_list) {
   if (checkboxElements.length == 0) return
 
   checkboxElements.forEach(element => {
-    console.log(element)
-    output_string += getNearestText(element, text_list)
+    if (isVisible(element)) {
+      console.log(element)
+      output_string += getNearestText(element, text_list)
+    }
   })
 
   return output_string

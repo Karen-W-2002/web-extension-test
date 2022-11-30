@@ -5,6 +5,9 @@ function getTextList() {
   // Searches for elements with only text and pushes it into a new list
   element_list.forEach(el => {
 
+    // If el doesn't exist on the page, skip this element
+    if (!isVisible(el)) return
+
     // Checks if any text/elements are nested within the current el
     // Then checks if the first nested text/element is a text (nodeValue will be null if its another element)
     if (el.childNodes[0] && el.childNodes[0].nodeValue) {
@@ -78,4 +81,19 @@ function getNearestText(element, text_list) {
   if (text_elements.right.childNodes[0].nodeValue != "")
     return `<p>Checkbox input name - ${text_elements.right.childNodes[0].nodeValue}</p><br/>`
   return
+}
+
+// check visibility of element
+function isVisible(element) {
+  try {
+    const style = window.getComputedStyle(element);
+    if (style.display === "none" || style.display == "none !important") return false;
+    if (style.visibility !== "visible") return false;
+    if (element.offsetParent == null) return false;
+    if (style.opacity < 0.1) return false;
+    if (element.offsetWidth + element.offsetHeight + element.getBoundingClientRect().height + element.getBoundingClientRect().width === 0) {
+      return false;
+    }
+  } catch (e) { console.log("Not an element.") } // Skip if it is other type element.
+  return true;
 }
