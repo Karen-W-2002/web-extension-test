@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     text_list = getTextList()
 
     this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
-    // this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
+    this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
     // this.getRangeOptions(document.querySelectorAll("input[type=range]"))
     // this.getSelectOptions(document.querySelectorAll("select"))
     // this.getFileOptions(document.querySelectorAll("input[type=file]"))
@@ -65,7 +65,10 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     // TODO: 1. Put in correct information
     let text_list = []
     text_list = getTextList()
-    let report_string = this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
+
+    let report_string;
+    report_string += this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
+    report_string += this.getRadioOptions(document.querySelectorAll("input[type=radio"), text_list)
 
     // Create new tab: reports.html
     chrome.runtime.sendMessage({

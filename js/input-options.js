@@ -18,6 +18,43 @@ function getCheckboxOptions(pageElement, text_list) {
   return output_string
 }
 
+// FIXME: same name different forms are in different groups 
+function getRadioOptions(pageElement, text_list) {
+  let radioElements = pageElement
+  let output_string = ""
+  let radioHashmap = {}
+  let radioOptions = new Array
+
+  if (radioElements.length == 0) return
+
+  radioElements.forEach(element => {
+    if(isVisible)
+    {
+      console.log(element)
+      if (radioHashmap[element.name] == null) {
+        radioOptions[element.name] = ""
+        radioHashmap[element.name] = 1
+        radioOptions[element.name] = getNearestText(element, text_list)
+      } else {
+        radioOptions[element.name] += getNearestText(element, text_list)
+        // radioHashmap[element.name]++ 
+      }
+    }
+  })
+
+  // Logs the number of radio groups
+  // let numRadioGroups = Object.keys(radioHashmap).length
+
+  // key is the element.name
+  for (const key in radioHashmap) {
+    output_string += "Radio Group: " + key + NEWLINE
+    output_string += radioOptions[key] + NEWLINE
+    // output_string += key + " options: " + radioHashmap[key] + NEWLINE + NEWLINE
+  }
+
+  return output_string
+}
+
 function getColorOptions(pageElement) {
   let colorElements = pageElement
   let output_string = ""
@@ -237,33 +274,7 @@ function getNumberOptions(pageElement) {
   return
 }
 
-// FIXME: same namme different forms are in different groups 
-function getRadioOptions(pageElement) {
-  let radioElements = pageElement
-  let output_string = "";
 
-  if (radioElements.length == 0) return
-
-  let radioHashmap = {}
-
-  radioElements.forEach(element => {
-    console.log(element)
-    if (radioHashmap[element.name] == null) {
-      radioHashmap[element.name] = 1
-    } else {
-      radioHashmap[element.name]++
-    }
-  })
-
-  // key is the element.name
-  for (const key in radioHashmap) {
-    output_string += "Radio Input" + NEWLINE
-    output_string += key + " options: " + radioHashmap[key] + NEWLINE + NEWLINE
-  }
-  console.log(output_string)
-
-  return
-}
 
 function getRangeOptions(pageElement) {
   let rangeElements = pageElement
