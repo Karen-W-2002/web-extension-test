@@ -10,11 +10,21 @@ function getTextList() {
     if (!isVisible(el)) return
 
     // Checks if any text/elements are nested within the current el
-    // Then checks if the first nested text/element is a text (nodeValue will be null if its another element)
-    // TODO: should loop through all the child nodes instead of checking just the first childnode
-    if (el.childNodes[0] && el.childNodes[0].nodeValue) {
-      let pos = el.getBoundingClientRect()
-      pos_list.push({ element: el, pos: pos })
+    // Then checks if the nested text/element is a text (nodeValue will be null if its another element)
+    // Get the children of current element
+    let children = el.childNodes
+    // Loop through each children
+    for(const node of children)
+    {
+      if(node.nodeValue)
+      {
+        let processed_str = node.nodeValue.trim()
+        if(processed_str != "")
+        {
+          let pos = el.getBoundingClientRect()
+          pos_list.push({ element: el, pos: pos, label: processed_str})
+        }
+      }
     }
   })
 
@@ -25,6 +35,8 @@ function getTextList() {
 function getNearestText(element, text_list) {
   // Initializes object for the elements of the smallest offset of each direction
   let nearest_text = { top: null, right: null, bottom: null, left: null }
+
+  console.log(text_list)
 
   // Gets the position of the current input element
   let element_pos = element.getBoundingClientRect()
@@ -50,6 +62,7 @@ function getNearestText(element, text_list) {
         distance_x: distance_x,
         distance_y: distance_y_total,
         element: text_el.element,
+        label: text_el.label,
       }
       if (nearest_text.right == null) nearest_text.right = new_nearest
       else {
@@ -61,7 +74,7 @@ function getNearestText(element, text_list) {
 
   // TODO: currently it is a simplified version (only right)
   if (nearest_text.right)
-    return `<p>${element.type} input name - ${nearest_text.right.element.childNodes[0].nodeValue}</p><br/>`
+    return `<p>${element.type} input name - ${nearest_text.right.label}</p><br/>`
   return ''
 }
 
