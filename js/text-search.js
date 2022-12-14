@@ -36,45 +36,73 @@ function getNearestText(element, text_list) {
   // Initializes object for the elements of the smallest offset of each direction
   let nearest_text = { top: null, right: null, bottom: null, left: null }
 
-  console.log(text_list)
-
   // Gets the position of the current input element
   let element_pos = element.getBoundingClientRect()
 
   // Loops through the list of text elements
   text_list.forEach(text_el => {
-    let x1 = element_pos.left
-    let y1 = element_pos.top
+    // (x1,y1) is the position of the input element
+    // (x2, y2) is the position of the text element
+    let x1_left = element_pos.left
+    let x1_right = element_pos.right
+    let y1_top = element_pos.top
     let y1_bottom = element_pos.bottom
 
-    let x2 = text_el.pos.left
-    let y2 = text_el.pos.top
+    let x2_left = text_el.pos.left
+    let x2_right = text_el.pos.right
+    let y2_top = text_el.pos.top
     let y2_bottom = text_el.pos.bottom
 
-    let distance_x = x2 - x1
-    let distance_y_top = Math.abs(y2 - y1)
-    let distance_y_bottom = Math.abs(y2_bottom - y1_bottom)
-    let distance_y_total = distance_y_top + distance_y_bottom
+    let distance_x = x2_left - x1_left
+    let distance_y = y2_top - y1_top
+
+    let offset_y_top = Math.abs(y2_top - y1_top)
+    let offset_y_bottom = Math.abs(y2_bottom - y1_bottom)
+    let offset_y_total = offset_y_top + offset_y_bottom
+
+    let offset_x_left = Math.abs(x2_left - x1_left)
+    let offset_x_right = Math.abs(x2_right - x1_right)
+    let offset_x_total = offset_x_left + offset_x_right
 
     // Check for nearest text RIGHT of the element
-    if (((distance_x >= 0) && (distance_x <= 50) && (distance_y_total <= 50))) {
+    if (((distance_x >= 0) && (distance_x <= 50) && (offset_y_total <= 50))) {
       let new_nearest = {
         distance_x: distance_x,
-        distance_y: distance_y_total,
+        offset_y: offset_y_total,
         element: text_el.element,
         label: text_el.label,
       }
-      if (nearest_text.right == null) nearest_text.right = new_nearest
+      if (nearest_text.right === null) nearest_text.right = new_nearest
       else {
-        // if ((nearest_text.right.distance_x > new_nearest.distance_x))
-        if (nearest_text.right.distance_y > new_nearest.distance_y) nearest_text.right = new_nearest
+        if (nearest_text.right.offset_y > new_nearest.offset_y) nearest_text.right = new_nearest
+      }
+    }
+
+    // Check for nearest text TOP of the element
+    if(((distance_y >= 0) && (distance_y <= 50)) && (offset_x_total <= 50)) {
+      let new_nearest = {
+        distance_y: this.distance_y,
+        offset_x: offset_x_total,
+        element: text_el.element,
+        label: text_el.label,
+      }
+      if(nearest_text.top === null) nearest_text.top = new_nearest
+      else {
+        if(nearest_text.top.offset_x > new_nearest.offset_x) nearest_text.top = new_nearest
       }
     }
   })
 
-  // TODO: currently it is a simplified version (only right)
+  // TODO: currently it is a simplified version (only right and top)
   if (nearest_text.right)
-    return `<p>${element.type} input name - ${nearest_text.right.label}</p><br/>`
+    return `<p>${element.type} input name - ${nearest_text.right.label}</p>`
+  else if(nearest_text.top)
+  {
+    console.log(nearest_text)
+    console.log(nearest_text.top)
+    return `<p>${element.type} input name - ${nearest_text.top.label}</p>`
+  }
+    
   return ''
 }
 

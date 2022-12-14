@@ -19,19 +19,14 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   }
   else if (req.type === "popup-parse") {
 
-    {
-      // TESTING AREA
-
-    }
-
     // List that has all TEXT positions
     let text_list = []
     text_list = getTextList()
 
     this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
     this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
-    // this.getRangeOptions(document.querySelectorAll("input[type=range]"))
-    // this.getSelectOptions(document.querySelectorAll("select"))
+    this.getRangeOptions(document.querySelectorAll("input[type=range]"))
+    this.getSelectOptions(document.querySelectorAll("select"))
     // this.getFileOptions(document.querySelectorAll("input[type=file]"))
     // this.getTimeOptions(document.querySelectorAll("input[type=time]"))
     // this.getWeekOptions(document.querySelectorAll("input[type=week]"))
@@ -68,7 +63,9 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
     let report_string;
     report_string += this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
-    report_string += this.getRadioOptions(document.querySelectorAll("input[type=radio"), text_list)
+    report_string += this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
+    report_string += this.getRangeOptions(document.querySelectorAll("input[type=range]"), text_list)
+    report_string += this.getSelectOptions(document.querySelectorAll("select"), text_list)
 
     // Create new tab: reports.html
     chrome.runtime.sendMessage({

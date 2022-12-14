@@ -19,6 +19,7 @@ function getCheckboxOptions(pageElement, text_list) {
 }
 
 // FIXME: same name different forms are in different groups 
+// TODO: Disabled checkboxes shouldn't be displayed?
 function getRadioOptions(pageElement, text_list) {
   let radioElements = pageElement
   let output_string = ""
@@ -37,7 +38,7 @@ function getRadioOptions(pageElement, text_list) {
         radioOptions[element.name] = getNearestText(element, text_list)
       } else {
         radioOptions[element.name] += getNearestText(element, text_list)
-        // radioHashmap[element.name]++ 
+        radioHashmap[element.name]++ 
       }
     }
   })
@@ -47,10 +48,71 @@ function getRadioOptions(pageElement, text_list) {
 
   // key is the element.name
   for (const key in radioHashmap) {
-    output_string += "Radio Group: " + key + NEWLINE
-    output_string += radioOptions[key] + NEWLINE
+    output_string += "<p>Radio Group: " + key + "</p>"
+    output_string += "<p>" + radioOptions[key] + "</p>"
     // output_string += key + " options: " + radioHashmap[key] + NEWLINE + NEWLINE
   }
+
+  return output_string
+}
+
+function getRangeOptions(pageElement, text_list) {
+  let rangeElements = pageElement
+  let output_string = ""
+
+  if (rangeElements.length == 0) return
+
+  rangeElements.forEach(element => {
+    console.log(element)
+    // This is the default values for browser if they didn't set a value
+    let min = 0
+    let max = 100
+    let step = 1
+
+    // Checks for default values
+    if (element.min != "") {
+      min = element.min
+    }
+
+    if (element.max != "") {
+      max = element.max
+    }
+
+    if (element.step != "") {
+      step = element.step
+    }
+
+    // Find possible options
+    // +1 because default value
+    let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
+
+    output_string += getNearestText(element, text_list)
+    output_string += `<p>options: ${possible_sum}</p>`
+  })
+
+  return output_string
+}
+
+// TODO: Some options are data-placeholders (don't count)
+function getSelectOptions(pageElement, text_list) {
+  let selectOptionElements = pageElement
+  let output_string = ""
+
+  if (selectOptionElements.length == 0) return
+
+  selectOptionElements.forEach(element => {
+    console.log(element)
+    let optionsElements = element.querySelectorAll('option')
+
+    // TODO: NEAREST TEXT??? when there is no data placeholder else just use the data placeholder
+    // output_string += "<p>Select/Option Input" + "</p>"
+    output_string += getNearestText(element, text_list)
+    optionsElements.forEach(opt => {
+      // FIXME: maybe we can use the same method of getTextList
+      output_string += `<p>${opt.childNodes[0].nodeValue}</p>`
+    })
+    output_string += "<br/>"
+  })
 
   return output_string
 }
@@ -270,66 +332,6 @@ function getNumberOptions(pageElement) {
     }
   })
   console.log(output_string)
-
-  return
-}
-
-
-
-function getRangeOptions(pageElement) {
-  let rangeElements = pageElement
-  let output_string = ""
-
-  if (rangeElements.length == 0) return
-
-  rangeElements.forEach(element => {
-    console.log(element)
-    let min = 0
-    let max = 100
-    let step = 1
-
-    // Checks for default values
-    if (element.min != "") {
-      min = element.min
-    }
-
-    if (element.max != "") {
-      max = element.max
-    }
-
-    if (element.step != "") {
-      step = element.step
-    }
-
-    // Find possible options
-    // +1 because default value
-    let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
-
-    output_string += "Range Input" + NEWLINE
-    output_string += "options: " + possible_sum + NEWLINE + NEWLINE
-  })
-  console.log(output_string)
-
-  return
-}
-
-// TODO: Some options are data-placeholders (don't count)
-function getSelectOptions(pageElement) {
-  let selectOptionElements = pageElement
-  let output_string = ""
-
-  if (selectOptionElements.length == 0) return
-
-  selectOptionElements.forEach(element => {
-    console.log(element)
-    let optionsElements = element.querySelectorAll('option')
-    console.log("Select/Option Input" + NEWLINE + "options: " + optionsElements.length + NEWLINE + NEWLINE)
-
-
-    // output_string += "Select/Option Input" + NEWLINE
-    // output_string += "options: " + optionsElements.length + NEWLINE + NEWLINE
-  })
-  // console.log(output_string)
 
   return
 }
