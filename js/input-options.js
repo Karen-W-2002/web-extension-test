@@ -1,5 +1,6 @@
 // input-options.js
 
+// TODO: add isVisible to others
 // TODO: days in dates are a bit funky because edge case for min max same month and year... doesn't subtract the days
 function getCheckboxOptions(pageElement) {
   let checkboxElements = pageElement
@@ -7,10 +8,12 @@ function getCheckboxOptions(pageElement) {
 
   if (checkboxElements.length == 0) return
 
+  // For each of the checkbox element
   checkboxElements.forEach(element => {
     if (isVisible(element)) {
       console.log(element)
-      output_string += "<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Checkbox</td><td class=\"column3\">2</td></tr>"
+      let xpath = getXPath(element)
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Checkbox</td><td class=\"column3\">2</td></tr>`
     }
   })
 
@@ -31,12 +34,11 @@ function getRadioOptions(pageElement) {
     if(isVisible)
     {
       console.log(element)
+      
       if (radioHashmap[element.name] == null) {
         radioOptions[element.name] = ""
         radioHashmap[element.name] = 1
-        // radioOptions[element.name] = getNearestText(element, text_list)
       } else {
-        // radioOptions[element.name] += getNearestText(element, text_list)
         radioHashmap[element.name]++ 
       }
     }
@@ -47,16 +49,14 @@ function getRadioOptions(pageElement) {
 
   // Loops thru each radio group
   for (const key in radioHashmap) {
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Radio</td><td class=\"column3\">${radioHashmap[key]}</td></tr>`
-    // output_string += "<p>Radio Group: " + key + "</p>"
-    // output_string += "<p>" + radioOptions[key] + "</p>"
-    // output_string += key + " options: " + radioHashmap[key] + NEWLINE + NEWLINE
+    let xpath = "name=" + key
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Radio</td><td class=\"column3\">${radioHashmap[key]}</td></tr>`
   }
   
   return output_string
 }
 
-function getRangeOptions(pageElement, text_list) {
+function getRangeOptions(pageElement) {
   let rangeElements = pageElement
   let output_string = ""
 
@@ -66,6 +66,7 @@ function getRangeOptions(pageElement, text_list) {
     if(isVisible(element))
     {
       console.log(element)
+      let xpath = getXPath(element)
       // This is the default values for browser if they didn't set a value
       let min = 0
       let max = 100
@@ -88,9 +89,7 @@ function getRangeOptions(pageElement, text_list) {
       // +1 because default value
       let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
 
-      output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Range</td><td class=\"column3\">${possible_sum}</td></tr>`
-      // output_string += getNearestText(element, text_list)
-      // output_string += `<p>options: ${possible_sum}</p>`
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Range</td><td class=\"column3\">${possible_sum}</td></tr>`
     }
   })
 
@@ -98,7 +97,7 @@ function getRangeOptions(pageElement, text_list) {
 }
 
 // TODO: Some options are data-placeholders (don't count)
-function getSelectOptions(pageElement, text_list) {
+function getSelectOptions(pageElement) {
   let selectOptionElements = pageElement
   let output_string = ""
 
@@ -108,20 +107,16 @@ function getSelectOptions(pageElement, text_list) {
     if(isVisible(element))
     {
       console.log(element)
+      let xpath = getXPath(element)
       let optionsElements = element.querySelectorAll('option')
 
       // TODO: NEAREST TEXT??? when there is no data placeholder else just use the data placeholder
-      // output_string += "<p>Select/Option Input" + "</p>"
-      // output_string += getNearestText(element, text_list)
-      // Loop through each option
       let num_options = 0
       optionsElements.forEach(opt => {
         num_options++
-        // FIXME: maybe we can use the same method of getTextList
-        // output_string += `<p>${opt.childNodes[0].nodeValue}</p>`
       })
       // output_string += "<br/>"
-      output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Select</td><td class=\"column3\">${num_options}</td></tr>`
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Select</td><td class=\"column3\">${num_options}</td></tr>`
     }
   })
 
@@ -136,9 +131,9 @@ function getColorOptions(pageElement) {
 
   colorElements.forEach(element => {
     console.log(element)
-    // output_string += "Color Input" + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Color</td><td class=\"column3\">${256},${256},${256}</td></tr>`
-    // output_string += "red: 256, green: 256, blue: 256 options" + NEWLINE + NEWLINE
+    let xpath = getXPath(element)
+    // red: 256, green: 256, blue: 256
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Color</td><td class=\"column3\">${256},${256},${256}</td></tr>`
   })
 
   return output_string
@@ -152,6 +147,7 @@ function getDateOptions(pageElement) {
 
   dateElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
 
     // default values
     let min = "1970-01-01"
@@ -177,17 +173,14 @@ function getDateOptions(pageElement) {
     let total_years = year_max - year_min + 1
     let total_months = month_max - month_min + 1
 
-    // DD: 31 days because maximum days in some months
+    // possible options of DD: 31 days because maximum days in some months
     let possible_sum1 = 31
 
+    // possible options of MM/YY
     let possible_sum2 = month_max + (13 - month_min) + ((total_years - 2) * 12)
 
-    // output_string += "Date Input" + NEWLINE
-    // output_string += "options DD: " + possible_sum1 + NEWLINE
-    // output_string += "options MM/YY: " + possible_sum2 + NEWLINE + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Date</td><td class=\"column3\">${possible_sum1},${possible_sum2}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Date</td><td class=\"column3\">${possible_sum1},${possible_sum2}</td></tr>`
   })
-  // console.log(output_string)
 
   return output_string
 }
@@ -200,6 +193,8 @@ function getDatetimelocalOptions(pageElement) {
 
   dateElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     let min = "1970-01-01-00:00"
     let max = "2022-12-31-23:59"
     let step = "60"
@@ -241,18 +236,15 @@ function getDatetimelocalOptions(pageElement) {
     let total_years = year_max - year_min + 1
     let total_months = month_max - month_min + 1
 
-    // DD: 31 days because maximum days in a month
+    // options of DD: 31 days because maximum days in a month
     let possible_sum1 = 31
+    // options of MM/YY
     let possible_sum2 = month_max + (12 - month_min) + ((total_years - 2) * 12) + 1
+    // options of HH/MM
     let possible_sum3 = ((hours_to_minutes + minutes) / step_in_minutes) + 1
 
-    // output_string += "Datetime-local Input" + NEWLINE
-    // output_string += "options DD: " + possible_sum1 + NEWLINE
-    // output_string += "options MM/YY: " + possible_sum2 + NEWLINE
-    // output_string += "options HH/MM: " + possible_sum3 + NEWLINE + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Datetime-local</td><td class=\"column3\">${possible_sum1},${possible_sum2},${possible_sum3}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Datetime-local</td><td class=\"column3\">${possible_sum1},${possible_sum2},${possible_sum3}</td></tr>`
   })
-  // console.log(output_string)
 
   return output_string
 }
@@ -265,6 +257,8 @@ function getFileOptions(pageElement) {
 
   fileElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     if (element.multiple) {
       output_string += "File Input" + NEWLINE
       output_string += "options: 3 * accepted files" + NEWLINE + NEWLINE
@@ -286,6 +280,8 @@ function getMonthOptions(pageElement) {
 
   monthElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     let min = "1970-01"
     let max = "2022-12"
 
@@ -308,11 +304,8 @@ function getMonthOptions(pageElement) {
 
     let possible_sum = total_years * total_months
 
-    // output_string += "Month Input" + NEWLINE
-    // output_string += "options: " + possible_sum + NEWLINE + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Month</td><td class=\"column3\">${possible_sum}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Month</td><td class=\"column3\">${possible_sum}</td></tr>`
   })
-  // console.log(output_string)
 
   return output_string
 }
@@ -325,6 +318,8 @@ function getNumberOptions(pageElement) {
 
   numberElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     let min = element.min
     let max = element.max
     let step = 1
@@ -334,21 +329,15 @@ function getNumberOptions(pageElement) {
     }
 
     if (min == "" || max == "") {
-      // output_string += "Number Input" + NEWLINE
-      // output_string += "Infinite options" + NEWLINE + NEWLINE
-      output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Number</td><td class=\"column3\">inf</td></tr>`
+      // Infinite options
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">inf</td></tr>`
     } else {
       // Find possible options
       // +1 because default value
       let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
-      output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Number</td><td class=\"column3\">${possible_sum}</td></tr>`
-
-      // output_string += "Number Input" + NEWLINE
-      // output_string += "options: " + possible_sum + NEWLINE + NEWLINE
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">${possible_sum}</td></tr>`
     }
   })
-  // console.log(output_string)
-  
 
   return output_string
 }
@@ -361,6 +350,8 @@ function getTimeOptions(pageElement) {
 
   timeElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     let min = "00:00"
     let max = "23:59"
     let step = "60"
@@ -389,11 +380,8 @@ function getTimeOptions(pageElement) {
     let minutes = mm_max - mm_min
     let possible_sum = ((hours_to_minutes + minutes) / step_in_minutes) + 1
 
-    // output_string += "Time Input" + NEWLINE
-    // output_string += "options: " + possible_sum + NEWLINE + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Time</td><td class=\"column3\">${possible_sum}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Time</td><td class=\"column3\">${possible_sum}</td></tr>`
   })
-  // console.log(output_string)
 
   return output_string
 }
@@ -406,6 +394,8 @@ function getWeekOptions(pageElement) {
 
   weekElements.forEach(element => {
     console.log(element)
+    let xpath = getXPath(element)
+
     let min = "1970-W1"
     let max = "2022-W52"
 
@@ -428,11 +418,8 @@ function getWeekOptions(pageElement) {
 
     let possible_sum = total_years * total_weeks
 
-    // output_string += "Week Input" + NEWLINE
-    // output_string += "options: " + possible_sum + NEWLINE + NEWLINE
-    output_string += `<tr><td class=\"column1\">xpath...</td><td class=\"column2\">Week</td><td class=\"column3\">${possible_sum}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Week</td><td class=\"column3\">${possible_sum}</td></tr>`
   })
-  // console.log(output_string)
 
   return output_string
 }
