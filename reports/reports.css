@@ -1,0 +1,65 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: block;
+}
+
+.container-table {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.table-div {
+  overflow: scroll;
+  display: inline-block;
+  margin: 50px 0;
+}
+
+table {
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 10px;
+  width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  font-size: 1.2em;
+  font-family: sans-serif;
+}
+
+thead tr {
+  background-color: gray;
+  color: white;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: thin solid #F5F5F5;
+  background-color: #EFEFEF;
+}
+
+tbody tr:hover {
+  background-color: #DDDDDD;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  cursor: pointer;
+}
+
+.column1 {
+  width: 325px;
+}
+
+.column2 {
+  width: 175px;
+}
+
+.column3 {
+  width: 325px;
+}

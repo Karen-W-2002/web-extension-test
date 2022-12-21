@@ -19,14 +19,10 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   }
   else if (req.type === "popup-parse") {
 
-    // List that has all TEXT positions
-    let text_list = []
-    text_list = getTextList()
-
-    this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
-    this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
-    this.getRangeOptions(document.querySelectorAll("input[type=range]"))
-    this.getSelectOptions(document.querySelectorAll("select"))
+    // this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
+    // this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
+    // this.getRangeOptions(document.querySelectorAll("input[type=range]"))
+    // this.getSelectOptions(document.querySelectorAll("select"))
     // this.getFileOptions(document.querySelectorAll("input[type=file]"))
     // this.getTimeOptions(document.querySelectorAll("input[type=time]"))
     // this.getWeekOptions(document.querySelectorAll("input[type=week]"))
@@ -57,16 +53,53 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   }
   else if (req.cmd === "createContextMenu") {
-    // TODO: 1. Put in correct information
-    let text_list = []
-    text_list = getTextList()
+    let report_string = ""
+    let temp = ""
 
-    let report_string;
-    report_string += this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"), text_list)
-    report_string += this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
-    report_string += this.getRangeOptions(document.querySelectorAll("input[type=range]"), text_list)
-    report_string += this.getSelectOptions(document.querySelectorAll("select"), text_list)
+    temp =  this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
+    if(temp != undefined)
+      report_string += temp
 
+    temp = this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getRangeOptions(document.querySelectorAll("input[type=range]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getSelectOptions(document.querySelectorAll("select"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getTimeOptions(document.querySelectorAll("input[type=time]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getWeekOptions(document.querySelectorAll("input[type=week]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getMonthOptions(document.querySelectorAll("input[type=month]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getDateOptions(document.querySelectorAll("input[type=date]"))
+    if(temp != undefined)
+    report_string += temp
+
+    temp = this.getDatetimelocalOptions(document.querySelectorAll("input[type=datetime-local"))
+    if(temp != undefined)
+    report_string += temp
+
+    temp = this.getNumberOptions(document.querySelectorAll("input[type=number]"))
+    if(temp != undefined)
+      report_string += temp
+
+    temp = this.getColorOptions(document.querySelectorAll("input[type=color]"))
+    if(temp != undefined)
+      report_string += temp
+    
     // Create new tab: reports.html
     chrome.runtime.sendMessage({
       cmd: "createReportsPage",

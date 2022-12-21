@@ -2,12 +2,38 @@
 <html>
 
 <head>
-  <!-- <link rel="stylesheet" href="button.css"> -->
+  <title>Reports</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width", initial-scale="1">
+  <link rel="stylesheet" href="reports.css">
 </head>
 
 <body>
-  <div id="parse-results">
-
+  <div class="container-table">
+    <div class="table-div">
+      <table>
+        <thead>
+          <tr class="table-head">
+            <th class="column1">Target</th>
+            <th class="column2">Input Type</th>
+            <th class="column3">Options</th>
+          </tr>
+        </thead>
+        <tbody id="parse-results">
+          <!-- This is where the report will generate -->
+          <tr>
+            <td class="column1">XPath 1</td>
+            <td class="column2">Input name 1</td>
+            <td class="column3">...,...,...,...</td>
+          </tr>
+          <tr>
+            <td class="column1">XPath 2</td>
+            <td class="column2">Input name 2</td>
+            <td class="column3">...,...,...,...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <script src="reports.js"></script>
 </body>
