@@ -6,7 +6,7 @@ function getCheckboxOptions(pageElement) {
   let checkboxElements = pageElement
   let output_string = ""
 
-  if (checkboxElements.length == 0) return
+  if (checkboxElements.length === 0) return
 
   // For each of the checkbox element
   checkboxElements.forEach(element => {
@@ -28,14 +28,14 @@ function getRadioOptions(pageElement) {
   let radioHashmap = {}
   let radioOptions = new Array
 
-  if (radioElements.length == 0) return
+  if (radioElements.length === 0) return
 
   radioElements.forEach(element => {
     if(isVisible)
     {
       console.log(element)
       
-      if (radioHashmap[element.name] == null) {
+      if (!radioHashmap[element.name]) {
         radioOptions[element.name] = ""
         radioHashmap[element.name] = 1
       } else {
@@ -60,7 +60,7 @@ function getRangeOptions(pageElement) {
   let rangeElements = pageElement
   let output_string = ""
 
-  if (rangeElements.length == 0) return
+  if (rangeElements.length === 0) return
 
   rangeElements.forEach(element => {
     if(isVisible(element))
@@ -73,15 +73,15 @@ function getRangeOptions(pageElement) {
       let step = 1
 
       // Checks for default values
-      if (element.min != "") {
+      if (element.min !== "") {
         min = element.min
       }
 
-      if (element.max != "") {
+      if (element.max !== "") {
         max = element.max
       }
 
-      if (element.step != "") {
+      if (element.step !== "") {
         step = element.step
       }
 
@@ -101,7 +101,7 @@ function getSelectOptions(pageElement) {
   let selectOptionElements = pageElement
   let output_string = ""
 
-  if (selectOptionElements.length == 0) return
+  if (selectOptionElements.length === 0) return
 
   selectOptionElements.forEach(element => {
     if(isVisible(element))
@@ -127,7 +127,7 @@ function getColorOptions(pageElement) {
   let colorElements = pageElement
   let output_string = ""
 
-  if (colorElements.length == 0) return
+  if (colorElements.length === 0) return
 
   colorElements.forEach(element => {
     console.log(element)
@@ -143,7 +143,7 @@ function getDateOptions(pageElement) {
   let dateElements = pageElement
   let output_string = ""
 
-  if (dateElements.length == 0) return
+  if (dateElements.length === 0) return
 
   dateElements.forEach(element => {
     console.log(element)
@@ -154,11 +154,11 @@ function getDateOptions(pageElement) {
     let max = "2022-12-31"
 
     // Checks for default values
-    if (element.min != "") {
+    if (element.min !== "") {
       min = element.min
     }
 
-    if (element.max != "") {
+    if (element.max !== "") {
       max = element.max
     }
 
@@ -189,7 +189,7 @@ function getDatetimelocalOptions(pageElement) {
   let dateElements = pageElement
   let output_string = ""
 
-  if (dateElements.length == 0) return
+  if (dateElements.length === 0) return
 
   dateElements.forEach(element => {
     console.log(element)
@@ -200,15 +200,15 @@ function getDatetimelocalOptions(pageElement) {
     let step = "60"
 
     // Checks for default values
-    if (element.min != "") {
+    if (element.min !== "") {
       min = element.min
     }
 
-    if (element.max != "") {
+    if (element.max !== "") {
       max = element.max
     }
 
-    if (element.step != "") {
+    if (element.step !== "") {
       step = element.step
     }
 
@@ -253,7 +253,7 @@ function getFileOptions(pageElement) {
   let fileElements = pageElement
   let output_string = ""
 
-  if (fileElements.length == 0) return
+  if (fileElements.length === 0) return
 
   fileElements.forEach(element => {
     console.log(element)
@@ -276,7 +276,7 @@ function getMonthOptions(pageElement) {
   let monthElements = pageElement
   let output_string = ""
 
-  if (monthElements.length == 0) return
+  if (monthElements.length === 0) return
 
   monthElements.forEach(element => {
     console.log(element)
@@ -285,11 +285,11 @@ function getMonthOptions(pageElement) {
     let min = "1970-01"
     let max = "2022-12"
 
-    if (element.min != "") {
+    if (element.min !== "") {
       min = element.min
     }
 
-    if (element.max != "") {
+    if (element.max !== "") {
       max = element.max
     }
 
@@ -314,7 +314,7 @@ function getNumberOptions(pageElement) {
   let numberElements = pageElement
   let output_string = ""
 
-  if (numberElements.length == 0) return
+  if (numberElements.length === 0) return
 
   numberElements.forEach(element => {
     console.log(element)
@@ -324,11 +324,11 @@ function getNumberOptions(pageElement) {
     let max = element.max
     let step = 1
 
-    if (element.step != "") {
+    if (element.step !== "") {
       step = element.step
     }
 
-    if (min == "" || max == "") {
+    if (min === "" || max === "") {
       // Infinite options
       output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">inf</td></tr>`
     } else {
@@ -346,7 +346,7 @@ function getTimeOptions(pageElement) {
   let timeElements = pageElement
   output_string = ""
 
-  if (timeElements.length == 0) return
+  if (timeElements.length === 0) return
 
   timeElements.forEach(element => {
     console.log(element)
@@ -357,15 +357,15 @@ function getTimeOptions(pageElement) {
     let step = "60"
 
     // Checks for default values
-    if (element.min != "") {
+    if (element.min !== "") {
       min = element.min
     }
 
-    if (element.max != "") {
+    if (element.max !== "") {
       max = element.max
     }
 
-    if (element.step != "") {
+    if (element.step !== "") {
       step = element.step
     }
 
@@ -390,7 +390,7 @@ function getWeekOptions(pageElement) {
   let weekElements = pageElement
   let output_string = ""
 
-  if (weekElements.length == 0) return
+  if (weekElements.length === 0) return
 
   weekElements.forEach(element => {
     console.log(element)
@@ -399,11 +399,11 @@ function getWeekOptions(pageElement) {
     let min = "1970-W1"
     let max = "2022-W52"
 
-    if (element.min != "") {
+    if (element.min !== "") {
       min = element.min
     }
 
-    if (element.max != "") {
+    if (element.max !== "") {
       max = element.max
     }
 

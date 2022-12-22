@@ -57,47 +57,47 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     let temp = ""
 
     temp =  this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getRangeOptions(document.querySelectorAll("input[type=range]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getSelectOptions(document.querySelectorAll("select"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getTimeOptions(document.querySelectorAll("input[type=time]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getWeekOptions(document.querySelectorAll("input[type=week]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getMonthOptions(document.querySelectorAll("input[type=month]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getDateOptions(document.querySelectorAll("input[type=date]"))
-    if(temp != undefined)
+    if(temp !== undefined)
     report_string += temp
 
     temp = this.getDatetimelocalOptions(document.querySelectorAll("input[type=datetime-local"))
-    if(temp != undefined)
+    if(temp !== undefined)
     report_string += temp
 
     temp = this.getNumberOptions(document.querySelectorAll("input[type=number]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
 
     temp = this.getColorOptions(document.querySelectorAll("input[type=color]"))
-    if(temp != undefined)
+    if(temp !== undefined)
       report_string += temp
     
     // Create new tab: reports.html
