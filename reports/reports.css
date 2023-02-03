@@ -25,7 +25,7 @@ table {
   border-collapse: collapse;
   overflow: hidden;
   border-radius: 10px;
-  width: 500px;
+  width: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   font-size: 1.2em;
   font-family: sans-serif;
@@ -57,9 +57,9 @@ td {
 }
 
 .column2 {
-  width: 175px;
+  width: 200px;
 }
 
 .column3 {
-  width: 325px;
+  width: 400px;
 }

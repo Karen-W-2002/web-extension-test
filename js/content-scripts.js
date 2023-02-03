@@ -19,18 +19,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   }
   else if (req.type === "popup-parse") {
 
-    // this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
-    // this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
-    // this.getRangeOptions(document.querySelectorAll("input[type=range]"))
-    // this.getSelectOptions(document.querySelectorAll("select"))
-    // this.getFileOptions(document.querySelectorAll("input[type=file]"))
-    // this.getTimeOptions(document.querySelectorAll("input[type=time]"))
-    // this.getWeekOptions(document.querySelectorAll("input[type=week]"))
-    // this.getMonthOptions(document.querySelectorAll("input[type=month]"))
-    // this.getDateOptions(document.querySelectorAll("input[type=date]"))
-    // this.getDatetimelocalOptions(document.querySelectorAll("input[type=datetime-local"))
-    // this.getNumberOptions(document.querySelectorAll("input[type=number]"))
-    // this.getColorOptions(document.querySelectorAll("input[type=color]"))
   }
   else if (req.type === "popup-parse-iframe") {
 
@@ -55,12 +43,13 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   else if (req.cmd === "createContextMenu") {
     let report_string = ""
     let temp = ""
+    let text_list = getTextList()
 
     temp =  this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
     if(temp !== undefined)
       report_string += temp
 
-    temp = this.getRadioOptions(document.querySelectorAll("input[type=radio]"))
+    temp = this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
     if(temp !== undefined)
       report_string += temp
 
@@ -103,7 +92,7 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     // Create new tab: reports.html
     chrome.runtime.sendMessage({
       cmd: "createReportsPage",
-      results: report_string
+      results: report_string,
     })
   }
   else {

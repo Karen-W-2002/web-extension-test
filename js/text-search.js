@@ -95,13 +95,14 @@ function getNearestText(element, text_list) {
 
   // TODO: currently it is a simplified version (only right and top)
   if (nearest_text.right)
-    return `<p>${element.type} input name - ${nearest_text.right.label}</p>`
-  else if(nearest_text.top)
-  {
-    console.log(nearest_text)
-    console.log(nearest_text.top)
-    return `<p>${element.type} input name - ${nearest_text.top.label}</p>`
-  }
+    return `${nearest_text.right.label}, `
+    // return `<p>${element.type} input name - ${nearest_text.right.label}</p>`
+  // else if(nearest_text.top)
+  // {
+  //   console.log(nearest_text)
+  //   console.log(nearest_text.top)
+  //   return `<p>${element.type} input name - ${nearest_text.top.label}</p>`
+  // }
     
   return ''
 }

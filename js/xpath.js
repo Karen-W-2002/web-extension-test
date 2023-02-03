@@ -4,8 +4,8 @@
 function getXPath(element)
 {
   if(!element) return;
-  if(element.id) return "id=" + element.id;
-  if(element.name) return "name=" + element.name;
+  if(element.id && element.type != "radio") return "id=" + element.id;
+  if(element.name && element.type != "radio") return "name=" + element.name;
   // Find path instead
   return "//" + getPathTo(element);
 }

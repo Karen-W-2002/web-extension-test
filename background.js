@@ -38,7 +38,8 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   // Creates reports.html
   if (req.cmd === "createReportsPage") {
-    chrome.storage.local.set({ foo: req.results }, function () {
+    console.log(req)
+    chrome.storage.local.set({ report_string: req.results }, function () {
       // Storage is updated, create the tab
       chrome.tabs.create({ url: "reports/reports.html" })
     })

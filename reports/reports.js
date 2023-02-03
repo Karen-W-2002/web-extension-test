@@ -1,8 +1,6 @@
 // reports.js
 
-// document.body.style.backgroundColor = 'green'
-
-chrome.storage.local.get("foo", function (data) {
+chrome.storage.local.get(["report_string"], function (data) {
   let reportHTML = document.getElementById('parse-results')
-  reportHTML.innerHTML = data.foo
+  reportHTML.innerHTML = data.report_string
 })

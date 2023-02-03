@@ -13,20 +13,23 @@ function getCheckboxOptions(pageElement) {
     if (isVisible(element)) {
       console.log(element)
       let xpath = getXPath(element)
-      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Checkbox</td><td class=\"column3\">2</td></tr>`
+      let opts = "checked, unchecked"
+
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Checkbox</td><td class=\"column3\">${opts}</td></tr>`
     }
   })
 
-  return output_string
+  return output_string;
 }
 
 // FIXME: same name different forms are in different groups 
 // TODO: Disabled checkboxes shouldn't be displayed?
-function getRadioOptions(pageElement) {
+function getRadioOptions(pageElement, text_list) {
   let radioElements = pageElement
   let output_string = ""
   let radioHashmap = {}
   let radioOptions = new Array
+  // let optsXPath = new Array
 
   if (radioElements.length === 0) return
 
@@ -34,12 +37,14 @@ function getRadioOptions(pageElement) {
     if(isVisible)
     {
       console.log(element)
+      console.log(element.type)
       
       if (!radioHashmap[element.name]) {
-        radioOptions[element.name] = ""
+        radioOptions[element.name] = getNearestText(element, text_list)
         radioHashmap[element.name] = 1
       } else {
-        radioHashmap[element.name]++ 
+        radioOptions[element.name] += getNearestText(element, text_list)
+        radioHashmap[element.name]++
       }
     }
   })
@@ -50,7 +55,7 @@ function getRadioOptions(pageElement) {
   // Loops thru each radio group
   for (const key in radioHashmap) {
     let xpath = "name=" + key
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Radio</td><td class=\"column3\">${radioHashmap[key]}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Radio</td><td class=\"column3\">${radioOptions[key]}</td></tr>`
   }
   
   return output_string
@@ -65,7 +70,7 @@ function getRangeOptions(pageElement) {
   rangeElements.forEach(element => {
     if(isVisible(element))
     {
-      console.log(element)
+      // console.log(element)
       let xpath = getXPath(element)
       // This is the default values for browser if they didn't set a value
       let min = 0
@@ -89,14 +94,20 @@ function getRangeOptions(pageElement) {
       // +1 because default value
       let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
 
-      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Range</td><td class=\"column3\">${possible_sum}</td></tr>`
+      // parseInt ensures the number will be an integer, not a string
+      let min_next = parseInt(min) + parseInt(step)
+      let max_prev = parseInt(max) - parseInt(step)
+
+      // 4 options
+      let opts = min + ", " + min_next + ", " + max_prev + ", " + max
+
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Range</td><td class=\"column3\">${opts}</td></tr>`
     }
   })
 
   return output_string
 }
 
-// TODO: Some options are data-placeholders (don't count)
 function getSelectOptions(pageElement) {
   let selectOptionElements = pageElement
   let output_string = ""
@@ -106,17 +117,17 @@ function getSelectOptions(pageElement) {
   selectOptionElements.forEach(element => {
     if(isVisible(element))
     {
-      console.log(element)
+      let opts = ""
       let xpath = getXPath(element)
       let optionsElements = element.querySelectorAll('option')
 
-      // TODO: NEAREST TEXT??? when there is no data placeholder else just use the data placeholder
       let num_options = 0
       optionsElements.forEach(opt => {
         num_options++
+        if(!opt.disabled)
+          opts += `${opt.innerHTML}, `
       })
-      // output_string += "<br/>"
-      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Select</td><td class=\"column3\">${num_options}</td></tr>`
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Select</td><td class=\"column3\">${opts}</td></tr>`
     }
   })
 
@@ -133,7 +144,8 @@ function getColorOptions(pageElement) {
     console.log(element)
     let xpath = getXPath(element)
     // red: 256, green: 256, blue: 256
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Color</td><td class=\"column3\">${256},${256},${256}</td></tr>`
+    // output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Color</td><td class=\"column3\">${256},${256},${256}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Color</td><td class=\"column3\">#000000, #FFFFFF</td></tr>`
   })
 
   return output_string
@@ -179,7 +191,10 @@ function getDateOptions(pageElement) {
     // possible options of MM/YY
     let possible_sum2 = month_max + (13 - month_min) + ((total_years - 2) * 12)
 
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Date</td><td class=\"column3\">${possible_sum1},${possible_sum2}</td></tr>`
+    let opts = min + ", " + max
+
+    // output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Date</td><td class=\"column3\">${possible_sum1},${possible_sum2}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Date</td><td class=\"column3\">${opts}</td></tr>`
   })
 
   return output_string
@@ -243,33 +258,13 @@ function getDatetimelocalOptions(pageElement) {
     // options of HH/MM
     let possible_sum3 = ((hours_to_minutes + minutes) / step_in_minutes) + 1
 
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Datetime-local</td><td class=\"column3\">${possible_sum1},${possible_sum2},${possible_sum3}</td></tr>`
+    let opts = min + ", " + max
+
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Datetime-local</td><td class=\"column3\">${opts}</td></tr>`
+    // output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Datetime-local</td><td class=\"column3\">${possible_sum1},${possible_sum2},${possible_sum3}</td></tr>`
   })
 
   return output_string
-}
-
-function getFileOptions(pageElement) {
-  let fileElements = pageElement
-  let output_string = ""
-
-  if (fileElements.length === 0) return
-
-  fileElements.forEach(element => {
-    console.log(element)
-    let xpath = getXPath(element)
-
-    if (element.multiple) {
-      output_string += "File Input" + NEWLINE
-      output_string += "options: 3 * accepted files" + NEWLINE + NEWLINE
-    } else {
-      output_string += "File Input" + NEWLINE
-      output_string += "options: 2 * accepted files" + NEWLINE + NEWLINE
-    }
-  })
-  console.log(output_string)
-
-  return
 }
 
 function getMonthOptions(pageElement) {
@@ -303,8 +298,9 @@ function getMonthOptions(pageElement) {
     let total_months = month_max - month_min + 1
 
     let possible_sum = total_years * total_months
+    let opts = min + ", " + max
 
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Month</td><td class=\"column3\">${possible_sum}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Month</td><td class=\"column3\">${opts}</td></tr>`
   })
 
   return output_string
@@ -330,12 +326,19 @@ function getNumberOptions(pageElement) {
 
     if (min === "" || max === "") {
       // Infinite options
-      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">inf</td></tr>`
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">infinite</td></tr>`
     } else {
       // Find possible options
       // +1 because default value
-      let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
-      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">${possible_sum}</td></tr>`
+      // let possible_sum = Math.floor(Math.abs(max - min) / step) + 1
+      
+      let min_next = parseInt(min) + parseInt(step)
+      let max_prev = parseInt(max) - parseInt(step)
+
+      // 4 options
+      let opts = min + ", " + min_next + ", " + max_prev + ", " + max
+
+      output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Number</td><td class=\"column3\">${opts}</td></tr>`
     }
   })
 
@@ -370,6 +373,8 @@ function getTimeOptions(pageElement) {
     }
 
     let step_in_minutes = step / 60
+    let step_remaining_minutes = (step % 3600) / 60
+    let step_in_hours = step / 3600
     let hh_min = parseInt(min.split(":")[0])
     let hh_max = parseInt(max.split(":")[0])
     let mm_min = parseInt(min.split(":")[1])
@@ -380,7 +385,16 @@ function getTimeOptions(pageElement) {
     let minutes = mm_max - mm_min
     let possible_sum = ((hours_to_minutes + minutes) / step_in_minutes) + 1
 
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Time</td><td class=\"column3\">${possible_sum}</td></tr>`
+    // TODO: if time is very small, some options will be out of boundary, fix that
+    console.log(step)
+    let min_next = parseInt(parseInt(hh_min) + parseInt(step_in_hours)) + ":" + parseInt(parseInt(mm_min) + parseInt(step_remaining_minutes))
+    let max_prev = parseInt(parseInt(hh_max) - parseInt(step_in_hours)) + ":" + parseInt(parseInt(mm_max) - parseInt(step_remaining_minutes))
+
+    // 4 options
+    // let opts = min + ", " + min_next + ", " + max_prev + ", " + max
+    let opts = min + ", " + max
+
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Time</td><td class=\"column3\">${opts}</td></tr>`
   })
 
   return output_string
@@ -416,9 +430,10 @@ function getWeekOptions(pageElement) {
     let total_years = year_max - year_min + 1
     let total_weeks = week_max - week_min + 1
 
-    let possible_sum = total_years * total_weeks
+    // let possible_sum = total_years * total_weeks
+    let opts = min + ", " + max
 
-    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Week</td><td class=\"column3\">${possible_sum}</td></tr>`
+    output_string += `<tr><td class=\"column1\">${xpath}</td><td class=\"column2\">Week</td><td class=\"column3\">${opts}</td></tr>`
   })
 
   return output_string
