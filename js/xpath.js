@@ -1,6 +1,6 @@
 // xpath.js
 
-// For now, this function only gets the XPath of input elements...
+// For now, this function only gets the XPath of input elements
 function getXPath(element)
 {
   if(!element) return;
