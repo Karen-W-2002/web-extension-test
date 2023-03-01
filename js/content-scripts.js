@@ -4,7 +4,7 @@
 console.log("Web Extension Test up and running!")
 
 // Listens to incoming messages
-chrome.runtime.onMessage.addListener(function (req, sender, res) {
+chrome.runtime.onMessage.addListener(async function (req, sender, res) {
 
   if (req.type === "popup") {
 
@@ -16,9 +16,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
     inputElements.forEach(element => {
       console.log(element)
     })
-  }
-  else if (req.type === "popup-parse") {
-
   }
   else if (req.type === "popup-parse-iframe") {
 
@@ -41,62 +38,25 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
 
   }
   else if (req.cmd === "createContextMenu") {
-    let report_string = ""
-    let temp = ""
-    let text_list = getTextList()
+    // Clear the storage first
+    chrome.storage.local.remove(["test"],function(){
+      var error = chrome.runtime.lastError;
+         if (error) {
+             console.error(error);
+         }
+     })
 
-    temp =  this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list)
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getRangeOptions(document.querySelectorAll("input[type=range]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getSelectOptions(document.querySelectorAll("select"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getTimeOptions(document.querySelectorAll("input[type=time]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getWeekOptions(document.querySelectorAll("input[type=week]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getMonthOptions(document.querySelectorAll("input[type=month]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getDateOptions(document.querySelectorAll("input[type=date]"))
-    if(temp !== undefined)
-    report_string += temp
-
-    temp = this.getDatetimelocalOptions(document.querySelectorAll("input[type=datetime-local"))
-    if(temp !== undefined)
-    report_string += temp
-
-    temp = this.getNumberOptions(document.querySelectorAll("input[type=number]"))
-    if(temp !== undefined)
-      report_string += temp
-
-    temp = this.getColorOptions(document.querySelectorAll("input[type=color]"))
-    if(temp !== undefined)
-      report_string += temp
-    
-    // Create new tab: reports.html
-    chrome.runtime.sendMessage({
-      cmd: "createReportsPage",
-      results: report_string,
+    await parse()
+    .then(async() => {
+      // Send a message to background.js to create reports.html
+      chrome.runtime.sendMessage({
+        cmd: "createReportsPage",
+      })
     })
+    .catch((err) => { console.log(err); })
+
   }
   else {
-
     // console.log("This message only shows on the webpage console, message: " + req.message);
     res("hello from content scripts")
   }
@@ -104,3 +64,48 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   // asynchronous response
   return true
 })
+
+
+// Problem: the getOptions are not asynchronous, which is why a timer is needed
+async function parse() {
+  // Gets a list of text on the current tab
+  let text_list = getTextList();
+    
+  // Checkbox options
+  await this.getCheckboxOptions(document.querySelectorAll("input[type=checkbox]"));
+
+  // Radio options
+  await this.getRadioOptions(document.querySelectorAll("input[type=radio]"), text_list);
+
+  // Input options
+  await this.getRangeOptions(document.querySelectorAll("input[type=range]"));
+
+  // Select options
+  await this.getSelectOptions(document.querySelectorAll("select"));
+
+  // Color options
+  await this.getColorOptions(document.querySelectorAll("input[type=color]"));
+
+  // Date options
+  await this.getDateOptions(document.querySelectorAll("input[type=date]"));
+
+  // Datetime-local options
+  await this.getDatetimelocalOptions(document.querySelectorAll("input[type=datetime-local"));
+
+  // Month options
+  await this.getMonthOptions(document.querySelectorAll("input[type=month]"));
+
+  // Number options
+  await this.getNumberOptions(document.querySelectorAll("input[type=number]"));
+
+  // Time options
+  await this.getTimeOptions(document.querySelectorAll("input[type=time]"));
+
+  // Week options
+  await this.getWeekOptions(document.querySelectorAll("input[type=week]"));
+
+  return new Promise((resolve, reject) => {
+    resolve("success")
+  })
+} 
+

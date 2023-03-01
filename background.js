@@ -39,21 +39,15 @@ chrome.runtime.onMessage.addListener(function (req, sender, res) {
   // Creates reports.html
   if (req.cmd === "createReportsPage") {
     console.log("creating reports page...")
-    chrome.storage.sync.set({ report_string: req.results }, function () {
+    chrome.storage.local.set({ report_string: req.results }, function () {
       // Storage is updated, create the tab
       chrome.tabs.create({ url: "reports/reports.html" });
     });
   }
 
   if(req.cmd === "screenshotTab") {
-    chrome.tabs.captureVisibleTab((dataURL) => {
-      // chrome.downloads.download({
-      //   filename: "chrome.jpg",
-      //   url: dataURL
-      // });
-      // Response to content script
-      chrome.storage.sync.set({ url: dataURL });
-      // res({ url: dataURL });
+    chrome.tabs.captureVisibleTab(null, {}, function (dataURL) {
+      res({ imgSrc: dataURL });
     });
   }
 

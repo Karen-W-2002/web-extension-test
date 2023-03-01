@@ -8,7 +8,8 @@
     "tabs",
     "notifications",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "<all_urls>"
